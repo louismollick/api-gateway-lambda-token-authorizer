@@ -1,0 +1,28 @@
+{
+  "name": "gateway-lambda-auth",
+  "version": "0.1.0",
+  "bin": {
+    "main": "bin/main.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/node": "20.5.9",
+    "aws-cdk": "^2.118.0",
+    "esbuild": "^0.19.4",
+    "ts-node": "^10.9.1",
+    "typescript": "~5.2.2"
+  },
+  "dependencies": {
+    "@types/aws-lambda": "^8.10.131",
+    "aws-cdk-lib": "^2.118.0",
+    "constructs": "^10.0.0"
+  },
+  "main": "index.js",
+  "license": "Apache-2.0"
+}
