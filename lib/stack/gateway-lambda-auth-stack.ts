@@ -34,7 +34,7 @@ export class GatewayLambdaAuth extends cdk.Stack {
     const lambdaAuthorizer = new MyAuthorizer(this, authorizerLambda);
 
     /** Creating Rest API */
-    const restApi = this.createRestApi(lambdaAuthorizer);
+    const restApi = new cdk.aws_apigateway.RestApi(this, 'rest-api-gateway');
 
     const integration = new cdk.aws_apigateway.LambdaIntegration(
       operationalLambda
@@ -42,7 +42,9 @@ export class GatewayLambdaAuth extends cdk.Stack {
 
     /** Creating /health resource at root for lambda Rest API */
     const healthResource = restApi.root.addResource('health');
-    healthResource.addMethod('GET', integration);
+    healthResource.addMethod('GET', integration, {
+      authorizer: lambdaAuthorizer,
+    });
 
     /** Returning Output with URL made as part of restApi */
     new cdk.CfnOutput(this, 'apiUrl', { value: restApi.url });
@@ -92,24 +94,6 @@ export class GatewayLambdaAuth extends cdk.Stack {
         timeout: cdk.Duration.minutes(2),
       }
     );
-  }
-
-  /**
-   * Creating Lambda Rest API, that integrates API to Operational Lambda with Authorizer
-   *
-   * @private
-   * @param {cdk.aws_apigateway.IAuthorizer} lambdaAuthorizer
-   * @return {*}  {cdk.aws_apigateway.restApi}
-   * @memberof GatewayLambdaAuth
-   */
-  private createRestApi(
-    lambdaAuthorizer: cdk.aws_apigateway.IAuthorizer
-  ): cdk.aws_apigateway.RestApi {
-    return new cdk.aws_apigateway.RestApi(this, 'rest-api-gateway', {
-      defaultMethodOptions: {
-        authorizer: lambdaAuthorizer,
-      },
-    });
   }
 }
 
